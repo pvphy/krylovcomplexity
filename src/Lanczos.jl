@@ -1,7 +1,7 @@
 module Lanczos
     using LinearAlgebra
     export lanczos
-    function lanczos(applyH!, dim::Int; m::Int=50)
+    function lanczos(applyH!, dim::Int; m::Int=50,rng)
         v = randn(dim)
         v ./= norm(v)
 
