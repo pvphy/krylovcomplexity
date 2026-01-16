@@ -22,7 +22,7 @@ using .Hamiltonian
 using .Lanczos
 using .KrylovTimeEvolution
 
-function generate_disorder(rng, L::Int, W::Float64)
+function disorder(rng, L::Int, W::Float64)
     return rand(rng,L) .* W .- W/2
 end
 
@@ -52,7 +52,7 @@ W=vals[5]            #disoredr stregth
 seed=Int(vals[6])
 Nup=L÷2              #no of up spins:Ndn=L-Nup
 
-
+BLAS.set_num_threads(4)
 
 println("L                 = ",L)
 println("Jx,Jy             = ",J)
@@ -63,8 +63,10 @@ println("Seed              = ",seed)
 println("Nup               = ",Nup)
 println("Sz               = ",(Nup-(L-Nup))/2.0)
 
+
+
 rng=MersenneTwister(seed)
-h=generate_disorder(rng,L,W)
+h=disorder(rng,L,W)
 
 
 basis=generate_basis(L,Nup)
@@ -82,7 +84,7 @@ println("Ground-state energy = ",minimum(eigvals))
 # state = basis[2]
 # println(state_bits(state, L))
 
-evolve_krylov(kry_ham;tmin=0.0,tmax=400.0,Nt=400,prefix="XXZ",seed,L,J,delta)
+evolve_krylov(kry_ham;tmin=0.0,tmax=100.0,Nt=400,prefix="XXZ",seed,L,J,delta)
 
 
 

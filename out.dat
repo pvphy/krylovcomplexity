@@ -1,10 +1,11 @@
-L                 = 14
+L                 = 28
 Jx,Jy             = 1.0
-Jz                = 1.0
+Jz                = 1.2
 Lanczos vectors m = 40
  W                = 0.0
 Seed              = 6759
-Nup               = 7
+Nup               = 14
 Sz               = 0.0
-dimension = 3432
-Ground-state energy = -6.026724661862131
+Julia threads = 4
+BLAS threads  = 4
+dimension = 40116600

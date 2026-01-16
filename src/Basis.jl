@@ -2,7 +2,6 @@ module Basis
 
 export generate_basis, state_index ,state_bits
 
-#with Nup spins up.
 
 function generate_basis(L::Int, Nup::Int)
     basis=Int[]

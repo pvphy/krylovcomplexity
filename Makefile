@@ -1,2 +1,2 @@
 all:
-	julia main.jl > out.dat &
+	julia  main.jl > out.dat &
