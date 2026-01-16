@@ -2,27 +2,27 @@ module KrylovTimeEvolution
     using LinearAlgebra
     export evolve_krylov
 
-    function evolve_krylov(kry_ham;tmin = 0.0,tmax = 50.0,Nt   = 50,prefix = "krylov")
+    function evolve_krylov(kry_ham;tmin=0.0,tmax=50.0,Nt=50,prefix = "krylov")
 
-        M = size(kry_ham, 1)
-
-
-        phi0 = zeros(ComplexF64, M)
-        phi0[1] = 1.0 + 0im
+        M=size(kry_ham, 1)
 
 
-        eig = eigen(kry_ham)
-        U = eig.vectors
-        E = eig.values
+        phi0=zeros(ComplexF64, M)
+        phi0[1]=1.0+0im
 
 
-        c0 = U' * phi0
+        eig=eigen(kry_ham)
+        U=eig.vectors
+        E=eig.values
 
 
-        times = range(tmin, tmax, length = Nt)
+        c0=U'*phi0
 
 
-        nvals = collect(0:M-1)
+        times=range(tmin, tmax, length=Nt)
+
+
+        nvals=collect(0:M-1)
 
 
         open("$(prefix)_probabilities.txt", "w") do io_p
@@ -31,16 +31,16 @@ module KrylovTimeEvolution
 
             for t in times
 
-                phase = exp.(-1im .* E .* t)
-                phi   = U * (phase .* c0)
-                pn    = abs2.(phi)
+                phase=exp.(-1im .* E .* t)
+                phi=U*(phase .* c0)
+                pn=abs2.(phi)
 
                 for n in 1:M
                     println(io_p, t, "  ", nvals[n], "  ", pn[n])
                 end
                 println(io_p) 
             
-                Kt = sum(nvals .* pn)
+                Kt=sum(nvals .* pn)
                 println(io_k, t, "  ", Kt)
             end
 
