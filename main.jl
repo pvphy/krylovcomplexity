@@ -42,7 +42,7 @@ function read_input_file(filename)
 end
 
 
-vals=read_input_file("input.txt")
+vals=read_input_file("input.dat")
 
 L= Int(vals[1])
 J=vals[2]          # Jx,Jy
@@ -56,7 +56,7 @@ Nup=L÷2              #no of up spins:Ndn=L-Nup
 
 println("L                 = ",L)
 println("Jx,Jy             = ",J)
-println("delta (Jz)        = ",delta)
+println("Jz                = ",delta)
 println("Lanczos vectors m = ",m)
 println(" W                = ",W)
 println("Seed              = ",seed)
@@ -82,7 +82,7 @@ println("Ground-state energy = ",minimum(eigvals))
 # state = basis[2]
 # println(state_bits(state, L))
 
-evolve_krylov(kry_ham;tmin=0.0,tmax=400.0,Nt=400,prefix = "run1")
+evolve_krylov(kry_ham;tmin=0.0,tmax=400.0,Nt=400,prefix="XXZ",seed,L,J,delta)
 
 
 

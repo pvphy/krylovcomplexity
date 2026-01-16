@@ -2,13 +2,13 @@ module KrylovTimeEvolution
     using LinearAlgebra
     export evolve_krylov
 
-    function evolve_krylov(kry_ham;tmin=0.0,tmax=50.0,Nt=50,prefix = "krylov")
-
-        M=size(kry_ham, 1)
+    function evolve_krylov(kry_ham;tmin=0.0,tmax=50.0,Nt=50,prefix = "krylov",seed,L,J,delta)
+        #evoluve in eigenbasis of Hk and then go back to krylov bais
+        M=size(kry_ham, 1) #number of Krylov basis states
 
 
         phi0=zeros(ComplexF64, M)
-        phi0[1]=1.0+0im
+        phi0[1]=1.0+0im    #At time t=0, the system is entirely at Krylov first krylov site 
 
 
         eig=eigen(kry_ham)
@@ -16,7 +16,7 @@ module KrylovTimeEvolution
         E=eig.values
 
 
-        c0=U'*phi0
+        c0=U'*phi0       #initial weight in energy space
 
 
         times=range(tmin, tmax, length=Nt)
@@ -25,14 +25,17 @@ module KrylovTimeEvolution
         nvals=collect(0:M-1)
 
 
-        open("$(prefix)_probabilities.txt", "w") do io_p
-        open("$(prefix)_complexity.txt", "w") do io_k
+        fname_prob = "$(prefix)_L$(L)_J$(J)_delta$(delta)_seed$(seed)_probabilities.txt"
+        fname_comp = "$(prefix)_L$(L)_J$(J)_delta$(delta)_seed$(seed)_complexity.txt"
+
+        open(fname_prob, "w") do io_p
+        open(fname_comp, "w") do io_k
 
 
             for t in times
 
                 phase=exp.(-1im .* E .* t)
-                phi=U*(phase .* c0)
+                phi=U*(phase .* c0)     #back to krylov basis
                 pn=abs2.(phi)
 
                 for n in 1:M
