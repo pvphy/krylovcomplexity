@@ -30,4 +30,4 @@ function state_bits(state::Int, L::Int)
     return bits
 end
 
-end # module
+end 
