@@ -1,7 +1,20 @@
 module Lanczos
     using LinearAlgebra
     export lanczos
-    function lanczos(applyH!, dim::Int; m::Int=50,rng)
+    function lanczos(applyH!, dim::Int; m::Int=50,rng,init::Symbol=:random,v0 = nothing)
+
+        if init== :random
+            v=randn(rng, dim)
+
+        elseif init == :neel
+            v0===nothing && error("For init=:neel, provide v0 (initial state vector)")
+            v=copy(v0)
+
+        else
+            error("Unknown init = $init")
+        end
+
+
         v= randn(dim)
         v./= norm(v)
 

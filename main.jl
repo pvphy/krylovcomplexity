@@ -26,6 +26,15 @@ function disorder(rng, L::Int, W::Float64)
     return rand(rng,L) .* W .- W/2
 end
 
+function neel_state(L)
+    state = 0
+    for i in 1:L
+        if isodd(i)
+            state |= (1 << (L - i))
+        end
+    end
+    return state
+end
 
 function read_input_file(filename)
     values = Float64[]
@@ -50,19 +59,20 @@ delta =vals[3]          # Jz
 m=Int(vals[4])
 W=vals[5]            #disoredr stregth
 seed=Int(vals[6])
+init_flag =Int(vals[7])
 Nup=L÷2              #no of up spins:Ndn=L-Nup
 
 BLAS.set_num_threads(4)
 
-println("L                 = ",L)
-println("Jx,Jy             = ",J)
-println("Jz                = ",delta)
-println("Lanczos vectors m = ",m)
-println(" W                = ",W)
-println("Seed              = ",seed)
-println("Nup               = ",Nup)
-println("Sz               = ",(Nup-(L-Nup))/2.0)
-
+println("L                 =",L)
+println("Jx,Jy             =",J)
+println("Jz                =",delta)
+println("Lanczos vectors m =",m)
+println(" W                =",W)
+println("Seed              =",seed)
+println("Nup               =",Nup)
+println("Sz                =",(Nup-(L-Nup))/2.0)
+println("initial state     =",init_flag)
 
 
 rng=MersenneTwister(seed)
@@ -77,7 +87,14 @@ println("dimension = ",dim)
 
 applyH!(out, v) = apply_xxz!(out,v,basis,index,L,J,delta,h)
 
-eigvals,kry_ham = lanczos(applyH!,dim;m=m,rng=rng)
+if init_flag==194264
+    eigvals,kry_ham = lanczos(applyH!,dim;m=m,rng=rng,init=:random)
+elseif init_flag==121212
+    psi00 = zeros(Float64,dim)
+    psi00[index[neel_state(L)]]=1.0
+    eigvals,kry_ham = lanczos(applyH!,dim;m=m,rng=rng,init=:neel,v0=psi00)
+end
+
 println("Ground-state energy = ",minimum(eigvals))
 
                     
