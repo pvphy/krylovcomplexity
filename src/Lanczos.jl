@@ -7,7 +7,7 @@ module Lanczos
             v=randn(rng, dim)
 
         elseif init == :neel
-            v0===nothing && error("For init=:neel, provide v0 (initial state vector)")
+            v0===nothing && error("For init=:neel, provide psi00")
             v=copy(v0)
 
         else
@@ -15,7 +15,7 @@ module Lanczos
         end
 
 
-        v= randn(dim)
+ 
         v./= norm(v)
 
         w=zeros(dim)

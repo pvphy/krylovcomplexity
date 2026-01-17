@@ -27,13 +27,13 @@ function disorder(rng, L::Int, W::Float64)
 end
 
 function neel_state(L)
-    state = 0
+    state1 = 0
     for i in 1:L
         if isodd(i)
-            state |= (1 << (L - i))
+            state1 |= (1 << (L - i))
         end
     end
-    return state
+    return state1
 end
 
 function read_input_file(filename)
@@ -49,7 +49,6 @@ function read_input_file(filename)
 
     return values
 end
-
 
 vals=read_input_file("input.dat")
 
@@ -88,20 +87,25 @@ println("dimension = ",dim)
 applyH!(out, v) = apply_xxz!(out,v,basis,index,L,J,delta,h)
 
 if init_flag==194264
-    eigvals,kry_ham = lanczos(applyH!,dim;m=m,rng=rng,init=:random)
+    eigvals,kry_ham=lanczos(applyH!,dim;m=m,rng=rng,init=:random)
+    evolve_krylov(kry_ham;tmin=0.0,tmax=100.0,Nt=400,prefix="random",seed,L,J,delta)
+
 elseif init_flag==121212
     psi00 = zeros(Float64,dim)
-    psi00[index[neel_state(L)]]=1.0
-    eigvals,kry_ham = lanczos(applyH!,dim;m=m,rng=rng,init=:neel,v0=psi00)
+    ino=index[neel_state(L)]
+    # println(ino)
+    psi00[ino]=1.0
+
+    eigvals,kry_ham=lanczos(applyH!,dim;m=m,rng=rng,init=:neel,v0=psi00)
+    evolve_krylov(kry_ham;tmin=0.0,tmax=100.0,Nt=400,prefix="neel",seed,L,J,delta)
 end
 
-println("Ground-state energy = ",minimum(eigvals))
-
-                    
+# println("Ground-state energy = ",minimum(eigvals))
+# println(basis)                    
 # state = basis[2]
-# println(state_bits(state, L))
+# println(state_bits(682, L))
 
-evolve_krylov(kry_ham;tmin=0.0,tmax=100.0,Nt=400,prefix="XXZ",seed,L,J,delta)
+
 
 
 

@@ -26,8 +26,8 @@ module KrylovTimeEvolution
 
 
         # fname_prob = "$(prefix)_L$(L)_J$(J)_delta$(delta)_seed$(seed)_probabilities.txt"
-        fname_comp = "$(prefix)_L$(L)_J$(J)_delta$(delta)_seed$(seed)_complexity.txt"
-        fname_phi = "$(prefix)_L$(L)_J$(J)_delta$(delta)_seed$(seed)_phi_nt.txt"
+        fname_comp="$(prefix)_L$(L)_J$(J)_delta$(delta)_seed$(seed)_complexity.txt"
+        fname_phi="$(prefix)_L$(L)_J$(J)_delta$(delta)_seed$(seed)_phi_nt.txt"
         # open(fname_prob, "w") do io_p
         open(fname_comp, "w") do io_k
         open(fname_phi, "w") do io_phi    
@@ -45,13 +45,13 @@ module KrylovTimeEvolution
                 # println(io_p) 
 
                 for n in 1:M
-                    println(io_phi,t, "  ",nvals[n], "  ",real(phi[n]), "  ",imag(phi[n]))
+                    println(io_phi,t,"  ",nvals[n],"  ",real(phi[n]),"  ",imag(phi[n]))
                 end
                 println(io_phi)
 
             
                 Kt=sum(nvals .* pn)
-                println(io_k, t, "  ", Kt)
+                println(io_k,t, "  ",Kt)
             end
 
         end

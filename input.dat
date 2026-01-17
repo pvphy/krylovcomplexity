@@ -4,4 +4,4 @@
 40     # lannczos vectos
 0.0    #disorder strength
 6759   #seed
-121212   #Initial state
+121212   #flag for initial state 194264=random,121212=neel
